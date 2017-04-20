@@ -1,0 +1,171 @@
+<html>
+
+<head>
+	<title></title>
+	<script src="assets/js/angular.min.js"></script>
+
+	<script>
+		var app = angular.module("surveyApp", []);
+
+		app.controller("surveyCtrl", function($scope, $http) {
+			$http.get("data/questions.json")
+				.then(function(response) {
+					console.log(response.data);
+					$scope.questions = response.data;
+				});
+			$scope.index = 0;
+			var data = [{}];
+			var config = {
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8;'
+				}
+			};
+
+
+			$scope.saveValF = function(qno, question, answer) {
+
+				data.push({
+					"questionNo": qno,
+					"question": question,
+					"answer": answer
+				});
+				console.log(data);
+				if ($scope.questions[qno - 1].type == "radio" && $scope.questions[qno - 1].redirect[0] != "none") {
+
+					console.log("test");
+
+					var len = answer.length;
+
+					if (answer.indexOf($scope.questions[qno - 1].redirect[0]) != -1) {
+
+						$scope.index += parseInt($scope.questions[qno - 1].redirect[1]);
+					}
+
+
+
+					/*
+										for (var i = 0; i < len; i++) {
+											ans = answer[i];
+										}
+
+										if (ans == $scope.questions[qno - 1].redirect[0]) {
+											$scope.index += parseInt($scope.questions[qno - 1].redirect[1]);
+										}*/
+				}
+				$scope.index += 1;
+
+				if ($scope.index == $scope.questions.length) {
+					$scope.message = "Thank you for your time";
+				}
+
+				$scope.option = [];
+			};
+
+			$scope.backF = function() {
+				$scope.index -= 1;
+				data.splice(data.length - 1, 1);
+			};
+
+			$scope.submitData = function() {
+
+				console.log(data);
+
+				var len = data.length;
+				for (var i = 0; i < len; i++) {
+					if (Array.isArray(data[i].answer)) {
+						var lenO = data[i].answer.length;
+						var answer = "";
+						for (var j = 0; j < lenO; j++) {
+							if (data[i].answer[j] != undefined) {
+
+								if (j != lenO - 1) {
+									answer += $scope.questions[parseInt(data[i].questionNo) - 1].options[j] + "|";
+								} else {
+									answer += $scope.questions[parseInt(data[i].questionNo) - 1].options[j];
+								}
+								console.log(answer);
+							}
+						}
+						data[i].answer = answer;
+					}
+
+				}
+				console.log(data);
+
+
+				for (i = 1; i < len; i++) {
+					var dataa = {
+						"qno": data[i].questionNo,
+						"question": data[i].question,
+						"ans": data[i].answer
+
+
+					};
+
+
+
+					$http.post("php/insert_info.php", dataa, config)
+						.success(function() {
+
+						});
+				}
+			};
+
+
+		});
+
+	</script>
+</head>
+
+<body>
+	<div ng-app="surveyApp">
+		<div ng-controller="surveyCtrl">
+			<button ng-if="!message && index!=0" ng-click="backF()">Back</button>
+			<div>{{questions[index].question}}</div>
+			<div ng-if="questions[index].type=='dropdown'">
+
+				<select ng-model="selectedOption" ng-options="option for option in questions[index].options"></select>
+
+				<button class="btn-next" ng-click="saveValF(questions[index].qno,questions[index].question,selectedOption)">Next</button>
+			</div>
+
+
+			<div ng-if="questions[index].type=='checkbox'">
+				<div ng-repeat="o in questions[index].options">
+
+					<input type="checkbox" name="check" value="{{o}}" ng-model="option[$index]">
+					<label>{{o}}</label>
+					<br>
+				</div>
+
+				<button class="btn-next" ng-click="saveValF(questions[index].qno,questions[index].question,option)">Next</button>
+			</div>
+
+			<div ng-if="questions[index].type=='radio'">
+				<div ng-repeat="o in questions[index].options">
+
+					<input type="radio" name="radiobutton" value="{{o}}" ng-model="option[$index]">
+					<label>{{o}}</label>
+					<br>
+				</div>
+
+				<button class="btn-next" ng-click="saveValF(questions[index].qno,questions[index].question,option)">Next</button>
+			</div>
+
+			<div ng-if="questions[index].type=='textarea'">
+
+
+				<textarea ng-model="text" width=100 height=100></textarea>
+
+				<br>
+
+
+				<button class="btn-next" ng-click="saveValF(questions[index].qno,questions[index].question,text)">Next</button>
+			</div>
+
+			<div ng-if="message">{{message}}<button ng-click="submitData()">Submit</button></div>
+		</div>
+	</div>
+</body>
+
+</html>

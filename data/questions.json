@@ -1,0 +1,74 @@
+[{
+		"qno": 1,
+		"question": "Please indicate your approximate age.",
+		"type": "dropdown",
+		"options": ["8-25", "26-35", "36-45", "46-55", "55-Above"]
+
+}, {
+		"qno": 2,
+		"question": "What types of products do you purchase on the Internet? Please check all that apply.",
+		"type": "checkbox",
+		"options": ["Books & Magazines", "Computer Hardware", "Music, CDs & Recordings", "Mobile ", "Furniture ", "Travel (airlines, car rentals, hotels)", "Clothing", "Flowers & Cake", "Tickets (concerts, movies, etc.)", "Services (insurance, legal & others)", " Tyres", "Hardware", "Bike & Care", "Shoes", "Flat’s", "Food’s"]
+
+},
+	{
+		"qno": 3,
+		"question": "You want to purchase medicine online",
+		"type": "radio",
+		"options": ["yes", "no"],
+		"redirect": ["none"]
+
+
+}, {
+		"qno": 4,
+		"question": "You have any medical insurance ",
+		"type": "radio",
+		"options": ["yes", "no"],
+		"redirect": ["yes", "1"]
+
+}, {
+		"qno": 5,
+		"question": "You want to get medical insurance free of cost",
+		"type": "radio",
+		"options": ["yes", "no"],
+		"redirect": ["none"]
+
+}, {
+		"qno": 6,
+		"question": "Are you suffered by B.P problem",
+		"type": "radio",
+		"options": ["yes", "no"],
+		"redirect": ["no", "1"]
+
+}, {
+		"qno": 7,
+		"question": "Where you go for regular checking",
+		"type": "radio",
+		"options": ["At Home", "Dr. Clinic"],
+		"redirect": ["none"]
+
+}, {
+		"qno": 8,
+		"question": "Are you suffered by Sugar problem",
+		"type": "radio",
+		"options": ["yes", "no"],
+		"redirect": ["none"]
+
+}, {
+		"qno": 9,
+		"question": "Are you want give a blood test sample at your home",
+		"type": "radio",
+		"options": ["yes", "no"],
+		"redirect": ["none"]
+
+}, {
+		"qno": 10,
+		"question": "Which services do you want to use online",
+		"type": "checkbox",
+		"options": ["Bike Servicing", "Car Servicing", "Plumber", "Electrician", "Carpenter", "Hair Cutting", "Spa", "Beautician "]
+}, {
+		"qno": 11,
+		"question": "please enter your suggestions...",
+		"type": "textarea"
+}
+]
